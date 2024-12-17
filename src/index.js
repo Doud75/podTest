@@ -154,6 +154,18 @@ async function createList() {
   }
 }
 
+async function getList() {
+  const readingListUrl = `${SELECTED_POD}getting-started/readingList/myList`;
+  let myReadingList;
+    // Attempt to retrieve the reading list in case it already exists.
+    myReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
+    // Clear the list to override the whole list
+    let items = getThingAll(myReadingList);
+    items.forEach((item) => {
+      myReadingList = removeThing(myReadingList, item);
+    });
+}
+
 buttonLogin.onclick = function () {
   loginToSelectedIdP();
 };
@@ -161,6 +173,12 @@ buttonLogin.onclick = function () {
 buttonRead.onclick = function () {
   getMyPods();
 };
+
+let readIt = document.getElementById("readIt");
+
+readIt.addEventListener('onClick', e => {
+  getList();
+})
 
 buttonCreate.onclick = function () {
   createList();

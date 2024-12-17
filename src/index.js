@@ -155,15 +155,23 @@ async function createList() {
 }
 
 async function getList() {
+  console.log('hello there');
+  const SELECTED_POD = document.getElementById("select-pod").value;
   const readingListUrl = `${SELECTED_POD}getting-started/readingList/myList`;
-  let myReadingList;
-    // Attempt to retrieve the reading list in case it already exists.
-    myReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
-    // Clear the list to override the whole list
-    let items = getThingAll(myReadingList);
-    items.forEach((item) => {
-      myReadingList = removeThing(myReadingList, item);
-    });
+  
+  let savedReadingList = await getSolidDataset(readingListUrl, { fetch: fetch });
+
+  let items = getThingAll(savedReadingList);
+
+  let listcontent = "";
+  for (let i = 0; i < items.length; i++) {
+    let item = getStringNoLocale(items[i], SCHEMA_INRUPT.name);
+    if (item !== null) {
+      listcontent += item + "\n";
+    }
+  }
+
+  document.getElementById("savedtitles").value = listcontent;
 }
 
 buttonLogin.onclick = function () {
@@ -176,9 +184,9 @@ buttonRead.onclick = function () {
 
 let readIt = document.getElementById("readIt");
 
-readIt.addEventListener('onClick', e => {
+readIt.onclick = function () {
   getList();
-})
+}
 
 buttonCreate.onclick = function () {
   createList();
